@@ -132,7 +132,7 @@ export default function Dimensions() {
   return (
     <group position={[0, 0.06, 0]}>
       {/* Linia szerokości */}
-      <group position={[0, 0, -depth / 2 - 0.2]}>
+      <group position={[0, 0, -depth / 2 - 0.5]}>
         <line>
           <bufferGeometry>
             <bufferAttribute
@@ -166,7 +166,7 @@ export default function Dimensions() {
       </group>
 
       {/* Linia głębokości */}
-      <group position={[-width / 2 - 0.2, 0, 0]}>
+      <group position={[-width / 2 - 0.5, 0, 0]}>
         <line>
           <bufferGeometry>
             <bufferAttribute

@@ -16,11 +16,36 @@
 }
 
 .controls-panel {
-  width: 250px;
+  width: 220px;
   padding: 20px;
   background-color: #f3f3f3;
   border-right: 1px solid #ccc;
   overflow-y: auto;
+}
+
+.material-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.material-option {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  transition: 0.2s;
+}
+
+.material-option:hover {
+  border-color: #888;
+}
+
+.material-option.selected {
+  border-color: #000;
 }
 
 .scene-canvas {
@@ -43,4 +68,21 @@
 .tab-buttons .active {
   background: #0077cc;
   color: white;
+}
+
+.reset-view-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  padding: 8px 12px;
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.reset-view-button:hover {
+  background: #555;
 }

@@ -1,44 +1,53 @@
-import React from "react";
+import React, { useMemo } from "react";
+import { useLoader } from "@react-three/fiber";
+import { TextureLoader, RepeatWrapping, MeshStandardMaterial } from "three";
 import { useTerraceStore } from "../store/useTerraceStore";
 
 export default function Walls({ width, depth }) {
   const { walls } = useTerraceStore();
-  const wallColor = "#555555";
-
-  // Grubość każdej ściany
+  const baseTexture = useLoader(
+    TextureLoader,
+    "/textures/walls/brick-wall_albedo.webp"
+  );
   const thickness = 0.1;
+
+  const createWallMaterial = (repeatX, repeatY) => {
+    const texture = baseTexture.clone();
+    texture.wrapS = RepeatWrapping;
+    texture.wrapT = RepeatWrapping;
+    texture.repeat.set(repeatX, repeatY);
+    texture.needsUpdate = true;
+
+    return new MeshStandardMaterial({ map: texture });
+  };
 
   return (
     <group>
-      {/* Left wall */}
       {walls.left > 0 && (
         <mesh position={[-width / 2 - thickness / 2, walls.left / 2, 0]}>
           <boxGeometry args={[thickness, walls.left, depth]} />
-          <meshStandardMaterial color={wallColor} />
+          <primitive object={createWallMaterial(depth, walls.left)} />
         </mesh>
       )}
 
-      {/* Right wall */}
       {walls.right > 0 && (
         <mesh position={[width / 2 + thickness / 2, walls.right / 2, 0]}>
           <boxGeometry args={[thickness, walls.right, depth]} />
-          <meshStandardMaterial color={wallColor} />
+          <primitive object={createWallMaterial(depth, walls.right)} />
         </mesh>
       )}
 
-      {/* Front wall */}
       {walls.front > 0 && (
         <mesh position={[0, walls.front / 2, depth / 2 + thickness / 2]}>
           <boxGeometry args={[width, walls.front, thickness]} />
-          <meshStandardMaterial color={wallColor} />
+          <primitive object={createWallMaterial(width, walls.front)} />
         </mesh>
       )}
 
-      {/* Back wall */}
       {walls.back > 0 && (
         <mesh position={[0, walls.back / 2, -depth / 2 - thickness / 2]}>
           <boxGeometry args={[width, walls.back, thickness]} />
-          <meshStandardMaterial color={wallColor} />
+          <primitive object={createWallMaterial(width, walls.back)} />
         </mesh>
       )}
     </group>

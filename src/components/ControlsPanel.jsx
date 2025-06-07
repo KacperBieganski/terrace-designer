@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useTerraceStore } from "../store/useTerraceStore";
 
 export default function ControlsPanel({ activeTab }) {
@@ -12,6 +13,19 @@ export default function ControlsPanel({ activeTab }) {
     setWallHeight,
   } = useTerraceStore();
 
+  const [textures, setTextures] = useState([]);
+
+  useEffect(() => {
+    setTextures([
+      "laminate-flooring-brown_albedo.webp",
+      "luxury-vinyl-plank_albedo.webp",
+      "mahogfloor_basecolor.webp",
+      "old-plank-flooring1_basecolor.webp",
+      "rich-brown-tile-variation_albedo.webp",
+      "tile4b_basecolor.webp",
+    ]);
+  }, []);
+
   return (
     <div className="controls-panel">
       {activeTab === "wymiary" && (
@@ -23,7 +37,7 @@ export default function ControlsPanel({ activeTab }) {
               <input
                 type="range"
                 min={1}
-                max={50}
+                max={20}
                 step={0.1}
                 value={width}
                 onChange={(e) => setWidth(parseFloat(e.target.value))}
@@ -31,7 +45,7 @@ export default function ControlsPanel({ activeTab }) {
               <input
                 type="number"
                 min={1}
-                max={50}
+                max={20}
                 step={0.1}
                 value={width}
                 onChange={(e) => setWidth(parseFloat(e.target.value))}
@@ -47,7 +61,7 @@ export default function ControlsPanel({ activeTab }) {
               <input
                 type="range"
                 min={1}
-                max={50}
+                max={20}
                 step={0.1}
                 value={depth}
                 onChange={(e) => setDepth(parseFloat(e.target.value))}
@@ -55,7 +69,7 @@ export default function ControlsPanel({ activeTab }) {
               <input
                 type="number"
                 min={1}
-                max={50}
+                max={20}
                 step={0.1}
                 value={depth}
                 onChange={(e) => setDepth(parseFloat(e.target.value))}
@@ -67,17 +81,22 @@ export default function ControlsPanel({ activeTab }) {
       )}
 
       {activeTab === "material" && (
-        <label>
-          Materiał:
-          <select
-            value={material}
-            onChange={(e) => setMaterial(e.target.value)}
-          >
-            <option value="wood">Drewno</option>
-            <option value="stone">Kamień</option>
-            <option value="concrete">Beton</option>
-          </select>
-        </label>
+        <div>
+          <p>Wybierz materiał:</p>
+          <div className="material-grid">
+            {textures.map((file) => (
+              <img
+                key={file}
+                src={`/textures/floors/${file}`}
+                alt={file}
+                onClick={() => setMaterial(file)}
+                className={`material-option ${
+                  material === file ? "selected" : ""
+                }`}
+              />
+            ))}
+          </div>
+        </div>
       )}
 
       {activeTab === "wall" && (
