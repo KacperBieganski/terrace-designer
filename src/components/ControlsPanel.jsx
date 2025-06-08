@@ -87,7 +87,7 @@ export default function ControlsPanel({ activeTab }) {
             {textures.map((file) => (
               <img
                 key={file}
-                src={`/textures/floors/${file}`}
+                src={`${import.meta.env.BASE_URL}textures/floors/${file}`}
                 alt={file}
                 onClick={() => setMaterial(file)}
                 className={`material-option ${

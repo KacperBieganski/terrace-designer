@@ -7,7 +7,7 @@ export default function Walls({ width, depth }) {
   const { walls } = useTerraceStore();
   const baseTexture = useLoader(
     TextureLoader,
-    "/textures/walls/brick-wall_albedo.webp"
+    `${import.meta.env.BASE_URL}textures/walls/brick-wall_albedo.webp`
   );
   const thickness = 0.1;
 

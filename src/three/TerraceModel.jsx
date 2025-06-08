@@ -6,7 +6,10 @@ import { TextureLoader, RepeatWrapping } from "three";
 export default function TerraceModel() {
   const { width, depth, material } = useTerraceStore();
 
-  const texture = useLoader(TextureLoader, `/textures/floors/${material}`);
+  const texture = useLoader(
+    TextureLoader,
+    `${import.meta.env.BASE_URL}textures/floors/${material}`
+  );
 
   texture.wrapS = RepeatWrapping;
   texture.wrapT = RepeatWrapping;
