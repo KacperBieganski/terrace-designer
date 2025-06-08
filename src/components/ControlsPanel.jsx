@@ -1,19 +1,16 @@
 import { useEffect, useState } from "react";
 import { useTerraceStore } from "../store/useTerraceStore";
+import DimensionsControls from "./DimensionsControls";
 
 export default function ControlsPanel({ activeTab }) {
-  const {
-    width,
-    depth,
-    material,
-    walls,
-    setWidth,
-    setDepth,
-    setMaterial,
-    setWallHeight,
-  } = useTerraceStore();
+  const { material, walls, shape, setMaterial, setWallHeight, setShape } =
+    useTerraceStore();
 
   const [textures, setTextures] = useState([]);
+  const showMeasurements = useTerraceStore((state) => state.showMeasurements);
+  const setShowMeasurements = useTerraceStore(
+    (state) => state.setShowMeasurements
+  );
 
   useEffect(() => {
     setTextures([
@@ -28,57 +25,26 @@ export default function ControlsPanel({ activeTab }) {
 
   return (
     <div className="controls-panel">
-      {activeTab === "wymiary" && (
-        <>
-          {/* Szerokość */}
-          <label>
-            Szerokość (m):
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <input
-                type="range"
-                min={1}
-                max={20}
-                step={0.1}
-                value={width}
-                onChange={(e) => setWidth(parseFloat(e.target.value))}
-              />
-              <input
-                type="number"
-                min={1}
-                max={20}
-                step={0.1}
-                value={width}
-                onChange={(e) => setWidth(parseFloat(e.target.value))}
-                style={{ width: "60px" }}
-              />
-            </div>
-          </label>
-
-          {/* Głębokość */}
-          <label>
-            Głębokość (m):
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <input
-                type="range"
-                min={1}
-                max={20}
-                step={0.1}
-                value={depth}
-                onChange={(e) => setDepth(parseFloat(e.target.value))}
-              />
-              <input
-                type="number"
-                min={1}
-                max={20}
-                step={0.1}
-                value={depth}
-                onChange={(e) => setDepth(parseFloat(e.target.value))}
-                style={{ width: "60px" }}
-              />
-            </div>
-          </label>
-        </>
+      {activeTab === "shape" && (
+        <div>
+          <p>Wybierz kształt:</p>
+          <div className="shape-grid">
+            {["square", "L", "T", "U"].map((shapeOption) => (
+              <div
+                key={shapeOption}
+                className={`shape-option ${
+                  shape === shapeOption ? "selected" : ""
+                }`}
+                onClick={() => setShape(shapeOption)}
+              >
+                <div className={`shape-preview ${shapeOption}`}></div>
+              </div>
+            ))}
+          </div>
+        </div>
       )}
+
+      {activeTab === "wymiary" && <DimensionsControls />}
 
       {activeTab === "material" && (
         <div>
@@ -136,6 +102,17 @@ export default function ControlsPanel({ activeTab }) {
           ))}
         </>
       )}
+      <div style={{ position: "absolute", bottom: "15px" }}>
+        <label style={{ cursor: "pointer", userSelect: "none" }}>
+          <input
+            type="checkbox"
+            checked={showMeasurements}
+            onChange={(e) => setShowMeasurements(e.target.checked)}
+            style={{ marginRight: "8px" }}
+          />
+          Pokaż wymiary
+        </label>
+      </div>
     </div>
   );
 }

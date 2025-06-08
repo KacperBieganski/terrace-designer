@@ -86,3 +86,75 @@
 .reset-view-button:hover {
   background: #555;
 }
+
+.shape-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.shape-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.shape-option:hover {
+  border-color: #aaa;
+}
+
+.shape-option.selected {
+  border-color: #007bff;
+  background-color: #f0f7ff;
+}
+
+.shape-preview {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 8px;
+  background-color: #eee;
+  position: relative;
+}
+
+.shape-preview.square {
+  background-color: #ccc;
+}
+
+.shape-preview.L {
+  background-color: #ccc;
+  clip-path: polygon(0 0, 50% 0, 50% 50%, 100% 50%, 100% 100%, 0 100%);
+}
+
+.shape-preview.T {
+  background-color: #ccc;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 50%,
+    75% 50%,
+    75% 100%,
+    25% 100%,
+    25% 50%,
+    0 50%
+  );
+}
+
+.shape-preview.U {
+  background-color: #ccc;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    70% 100%,
+    70% 50%,
+    30% 50%,
+    30% 100%,
+    0 100%
+  );
+}

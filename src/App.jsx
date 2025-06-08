@@ -5,7 +5,7 @@ import TabButtons from "./components/TabButtons";
 import "./App.css";
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState("wymiary");
+  const [activeTab, setActiveTab] = useState("shape");
 
   return (
     <div className="app-wrapper">

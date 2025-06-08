@@ -2,6 +2,12 @@ export default function TabButtons({ activeTab, setActiveTab }) {
   return (
     <div className="tab-buttons">
       <button
+        className={activeTab === "shape" ? "active" : ""}
+        onClick={() => setActiveTab("shape")}
+      >
+        Kształt
+      </button>
+      <button
         className={activeTab === "wymiary" ? "active" : ""}
         onClick={() => setActiveTab("wymiary")}
       >
