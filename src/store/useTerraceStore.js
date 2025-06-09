@@ -36,6 +36,7 @@ export const useTerraceStore = create((set) => ({
   shape: "square",
   dimensions: DEFAULT_DIMENSIONS.square,
   showMeasurements: true,
+  showEnvironment: false,
 
   setMaterial: (material) => set({ material }),
   setWallHeight: (side, height) =>
@@ -49,4 +50,5 @@ export const useTerraceStore = create((set) => ({
     }),
   setDimensions: (dimensions) => set({ dimensions }),
   setShowMeasurements: (value) => set({ showMeasurements: value }),
+  setShowEnvironment: (value) => set({ showEnvironment: value }),
 }));

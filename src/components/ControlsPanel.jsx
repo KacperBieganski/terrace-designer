@@ -12,6 +12,11 @@ export default function ControlsPanel({ activeTab }) {
     (state) => state.setShowMeasurements
   );
 
+  const showEnvironment = useTerraceStore((state) => state.showEnvironment);
+  const setShowEnvironment = useTerraceStore(
+    (state) => state.setShowEnvironment
+  );
+
   useEffect(() => {
     setTextures([
       "laminate-flooring-brown_albedo.webp",
@@ -20,6 +25,9 @@ export default function ControlsPanel({ activeTab }) {
       "old-plank-flooring1_basecolor.webp",
       "rich-brown-tile-variation_albedo.webp",
       "tile4b_basecolor.webp",
+      "concrete_tiles_02_diff_1k.webp",
+      "patterned_brick_floor_02_diff_1k.webp",
+      "wood_floor_deck_diff_1k.webp",
     ]);
   }, []);
 
@@ -102,6 +110,17 @@ export default function ControlsPanel({ activeTab }) {
           ))}
         </>
       )}
+      <div style={{ position: "absolute", bottom: "35px" }}>
+        <label style={{ cursor: "pointer", userSelect: "none" }}>
+          <input
+            type="checkbox"
+            checked={showEnvironment}
+            onChange={(e) => setShowEnvironment(e.target.checked)}
+            style={{ marginRight: "8px" }}
+          />
+          Pokaż tło
+        </label>
+      </div>
       <div style={{ position: "absolute", bottom: "15px" }}>
         <label style={{ cursor: "pointer", userSelect: "none" }}>
           <input
