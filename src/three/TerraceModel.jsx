@@ -30,8 +30,8 @@ export default function TerraceModel() {
           emissive="#bbbbbb"
           emissiveIntensity={0.03}
         />
-        <Walls shape={shape} dimensions={dimensions} />
 
+        <Walls />
         {showMeasurements && <Measurements />}
       </mesh>
     );
@@ -79,7 +79,7 @@ export default function TerraceModel() {
           />
         </mesh>
 
-        <Walls shape={shape} dimensions={dimensions} />
+        <Walls />
 
         {showMeasurements && <Measurements />}
       </group>
@@ -122,7 +122,7 @@ export default function TerraceModel() {
           />
         </mesh>
 
-        <Walls width={totalWidth} depth={totalDepth} />
+        <Walls />
         {showMeasurements && <Measurements />}
       </group>
     );
@@ -191,7 +191,7 @@ export default function TerraceModel() {
           />
         </mesh>
 
-        <Walls shape={shape} dimensions={dimensions} />
+        <Walls />
 
         {showMeasurements && <Measurements />}
       </group>

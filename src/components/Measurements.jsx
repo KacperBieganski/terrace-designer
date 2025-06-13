@@ -1,12 +1,13 @@
 import { useMemo } from "react";
 import { Line, Text } from "@react-three/drei";
 import { useTerraceStore } from "../store/useTerraceStore";
+import { getRawPoints } from "../store/useTerraceStore";
 
 export default function Measurements() {
   const { shape, dimensions } = useTerraceStore();
   const { mainWidth, mainDepth, extensionWidth, extensionDepth } = dimensions;
 
-  const margin = 0.5;
+  const margin = 0.3;
   const arrowSize = 0.1;
   const arrowAngle = Math.PI / 6;
 
@@ -62,77 +63,7 @@ export default function Measurements() {
       [tip, wing2],
     ];
   };
-
-  const rawPoints = useMemo(() => {
-    switch (shape) {
-      case "square":
-        return [
-          [-mainWidth / 2, 0, -mainDepth / 2],
-          [-mainWidth / 2, 0, mainDepth / 2],
-          [mainWidth / 2, 0, mainDepth / 2],
-          [mainWidth / 2, 0, -mainDepth / 2],
-          [-mainWidth / 2, 0, -mainDepth / 2],
-        ];
-
-      case "L": {
-        const w = mainWidth;
-        const d = mainDepth;
-        const ew = extensionWidth;
-        const ed = extensionDepth;
-
-        return [
-          [-w / 2, 0, -d / 2],
-          [-w / 2, 0, d / 2],
-          [w / 2, 0, d / 2],
-          [w / 2, 0, -d / 2 + ed],
-          [w / 2 + ew, 0, -d / 2 + ed],
-          [w / 2 + ew, 0, -d / 2],
-          [-w / 2, 0, -d / 2],
-        ];
-      }
-
-      case "T": {
-        const w = mainWidth;
-        const d = mainDepth;
-        const ew = extensionWidth;
-        const ed = extensionDepth;
-
-        return [
-          [-ew / 2, 0, -d / 2 - ed],
-          [-ew / 2, 0, -d / 2],
-          [-w / 2, 0, -d / 2],
-          [-w / 2, 0, d / 2],
-          [w / 2, 0, d / 2],
-          [w / 2, 0, -d / 2],
-          [ew / 2, 0, -d / 2],
-          [ew / 2, 0, -d / 2 - ed],
-          [-ew / 2, 0, -d / 2 - ed],
-        ];
-      }
-
-      case "U": {
-        const w = mainWidth;
-        const d = mainDepth;
-        const ew = extensionWidth;
-        const ed = extensionDepth;
-
-        return [
-          [-w / 2 - ew, 0, -d / 2 + ed],
-          [-w / 2, 0, -d / 2 + ed],
-          [-w / 2, 0, d / 2],
-          [w / 2, 0, d / 2],
-          [w / 2, 0, -d / 2 + ed],
-          [w / 2 + ew, 0, -d / 2 + ed],
-          [w / 2 + ew, 0, -d / 2],
-          [-w / 2 - ew, 0, -d / 2],
-          [-w / 2 - ew, 0, -d / 2 + ed],
-        ];
-      }
-
-      default:
-        return [];
-    }
-  }, [shape, mainWidth, mainDepth, extensionWidth, extensionDepth]);
+  const rawPoints = getRawPoints(shape, dimensions);
 
   const segments = useMemo(() => {
     const segs = [];

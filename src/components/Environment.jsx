@@ -39,12 +39,12 @@ function Trees() {
           child.material.side = THREE.DoubleSide;
 
           if (child.material.color) {
-            child.material.color.multiplyScalar(1.5);
+            child.material.color.multiplyScalar(2);
           }
 
           if (child.material.emissive) {
             child.material.emissive = new THREE.Color(0x222222);
-            child.material.emissiveIntensity = 0.5;
+            child.material.emissiveIntensity = 0.8;
           }
         }
       }

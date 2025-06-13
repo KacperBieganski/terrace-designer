@@ -1,222 +1,70 @@
 import React from "react";
 import { useLoader } from "@react-three/fiber";
-import { TextureLoader, RepeatWrapping, MeshStandardMaterial } from "three";
+import { TextureLoader, RepeatWrapping } from "three";
 import { useTerraceStore } from "../store/useTerraceStore";
+import { getRawPoints } from "../store/useTerraceStore";
 
-export default function Walls({ shape, dimensions }) {
-  const { walls } = useTerraceStore();
-  const texture = useLoader(
+export default function Walls() {
+  const { walls, shape, dimensions } = useTerraceStore();
+  const baseTexture = useLoader(
     TextureLoader,
     `${import.meta.env.BASE_URL}textures/walls/brick-wall_albedo.webp`
   );
-  const thickness = 0.1;
 
-  const createWallMaterial = (repeatX, repeatY) => {
-    const tex = texture.clone();
-    tex.wrapS = RepeatWrapping;
-    tex.wrapT = RepeatWrapping;
-    tex.repeat.set(repeatX, repeatY);
-    tex.needsUpdate = true;
-    return new MeshStandardMaterial({ map: tex });
+  const offsetSegment = ([x1, y1, z1], [x2, y2, z2], offset) => {
+    const dx = x2 - x1;
+    const dz = z2 - z1;
+    const len = Math.sqrt(dx * dx + dz * dz);
+    if (len === 0)
+      return [
+        [x1, y1, z1],
+        [x2, y2, z2],
+      ];
+    const nx = -dz / len;
+    const nz = dx / len;
+    return [
+      [x1 + nx * offset, y1, z1 + nz * offset],
+      [x2 + nx * offset, y2, z2 + nz * offset],
+    ];
   };
 
-  const { mainWidth, mainDepth, extensionWidth, extensionDepth } = dimensions;
+  const rawPoints = getRawPoints(shape, dimensions);
 
-  const wallsMeshes = [];
+  return (
+    <>
+      {rawPoints.slice(0, -1).map((start, i) => {
+        const height = walls[i] ?? 0;
+        if (height === 0) return null;
 
-  // === SHARED HELPERS ===
-  const addWall = (pos, size) => {
-    wallsMeshes.push(
-      <mesh position={pos} key={`${pos.join("_")}`}>
-        <boxGeometry args={size} />
-        <primitive object={createWallMaterial(size[0], size[1])} />
-      </mesh>
-    );
-  };
+        const end = rawPoints[i + 1];
+        const [[x1, y1, z1], [x2, y2, z2]] = offsetSegment(start, end, 0.05);
+        const dx = x2 - x1;
+        const dz = z2 - z1;
+        const length = Math.sqrt(dx * dx + dz * dz);
+        const angle = Math.atan2(dx, dz);
 
-  if (shape === "square") {
-    if (walls.left > 0)
-      addWall(
-        [-mainWidth / 2 - thickness / 2, walls.left / 2, 0],
-        [thickness, walls.left, mainDepth]
-      );
-    if (walls.right > 0)
-      addWall(
-        [mainWidth / 2 + thickness / 2, walls.right / 2, 0],
-        [thickness, walls.right, mainDepth]
-      );
-    if (walls.front > 0)
-      addWall(
-        [0, walls.front / 2, mainDepth / 2 + thickness / 2],
-        [mainWidth, walls.front, thickness]
-      );
-    if (walls.back > 0)
-      addWall(
-        [0, walls.back / 2, -mainDepth / 2 - thickness / 2],
-        [mainWidth, walls.back, thickness]
-      );
-  } else if (shape === "L") {
-    const totalWidth = mainWidth + extensionWidth;
-    const totalDepth = Math.max(mainDepth, extensionDepth);
+        // Sklonuj teksturę dla tej ściany
+        const texture = baseTexture.clone();
+        texture.wrapS = RepeatWrapping;
+        texture.wrapT = RepeatWrapping;
+        texture.repeat.set(length, height + 0.05);
+        texture.needsUpdate = true;
 
-    // Lewa ściana
-    if (walls.left > 0)
-      addWall(
-        [-mainWidth / 2 - thickness / 2, walls.left / 2, 0],
-        [thickness, walls.left, mainDepth]
-      );
-
-    // Tylna ściana główna
-    if (walls.back > 0)
-      addWall(
-        [0, walls.back / 2, -mainDepth / 2 - thickness / 2],
-        [mainWidth, walls.back, thickness]
-      );
-
-    // Ściana boczna L-nogi
-    if (walls.right > 0)
-      addWall(
-        [
-          mainWidth + extensionWidth / 2 - thickness / 2,
-          walls.right / 2,
-          -mainDepth / 2 + extensionDepth / 2,
-        ],
-        [thickness, walls.right, extensionDepth]
-      );
-
-    // Tylna ściana L-nogi
-    if (walls.back > 0)
-      addWall(
-        [
-          mainWidth / 2 + extensionWidth / 2,
-          walls.back / 2,
-          -mainDepth - extensionDepth / 2 - thickness / 2,
-        ],
-        [extensionWidth, walls.back, thickness]
-      );
-
-    // Czołowa ściana główna (jeśli obecna)
-    if (walls.front > 0)
-      addWall(
-        [0, walls.front / 2, mainDepth / 2 + thickness / 2],
-        [mainWidth, walls.front, thickness]
-      );
-  } else if (shape === "T") {
-    const totalDepth = mainDepth + extensionDepth;
-
-    // Lewa i prawa w poziomym segmencie
-    if (walls.left > 0)
-      addWall(
-        [-mainWidth / 2 - thickness / 2, walls.left / 2, 0],
-        [thickness, walls.left, mainDepth]
-      );
-    if (walls.right > 0)
-      addWall(
-        [mainWidth / 2 + thickness / 2, walls.right / 2, 0],
-        [thickness, walls.right, mainDepth]
-      );
-
-    // Tył poziomego segmentu
-    if (walls.back > 0)
-      addWall(
-        [0, walls.back / 2, -mainDepth / 2 - thickness / 2],
-        [mainWidth, walls.back, thickness]
-      );
-
-    // Czoło poziomego segmentu
-    if (walls.front > 0)
-      addWall(
-        [0, walls.front / 2, mainDepth / 2 + thickness / 2],
-        [mainWidth, walls.front, thickness]
-      );
-
-    // Boczne ściany w pionowej części T
-    if (walls.left > 0)
-      addWall(
-        [
-          -extensionWidth / 2 - thickness / 2,
-          walls.left / 2,
-          -mainDepth / 2 - extensionDepth / 2,
-        ],
-        [thickness, walls.left, extensionDepth]
-      );
-
-    if (walls.right > 0)
-      addWall(
-        [
-          extensionWidth / 2 + thickness / 2,
-          walls.right / 2,
-          -mainDepth / 2 - extensionDepth / 2,
-        ],
-        [thickness, walls.right, extensionDepth]
-      );
-
-    // Przód/powrót dolnej części T
-    if (walls.back > 0)
-      addWall(
-        [0, walls.back / 2, -mainDepth - extensionDepth / 2 - thickness / 2],
-        [extensionWidth, walls.back, thickness]
-      );
-  } else if (shape === "U") {
-    // Centralna część
-    if (walls.left > 0)
-      addWall(
-        [-mainWidth / 2 - thickness / 2, walls.left / 2, 0],
-        [thickness, walls.left, mainDepth]
-      );
-    if (walls.right > 0)
-      addWall(
-        [mainWidth / 2 + thickness / 2, walls.right / 2, 0],
-        [thickness, walls.right, mainDepth]
-      );
-    if (walls.back > 0)
-      addWall(
-        [0, walls.back / 2, -mainDepth / 2 - thickness / 2],
-        [mainWidth, walls.back, thickness]
-      );
-
-    // Lewe rozszerzenie
-    if (walls.left > 0)
-      addWall(
-        [
-          -mainWidth / 2 - extensionWidth / 2 - thickness / 2,
-          walls.left / 2,
-          -(mainDepth / 2) + extensionDepth / 2,
-        ],
-        [thickness, walls.left, extensionDepth]
-      );
-
-    // Prawe rozszerzenie
-    if (walls.right > 0)
-      addWall(
-        [
-          mainWidth / 2 + extensionWidth / 2 + thickness / 2,
-          walls.right / 2,
-          -(mainDepth / 2) + extensionDepth / 2,
-        ],
-        [thickness, walls.right, extensionDepth]
-      );
-
-    // Czoło lewej i prawej odnogi
-    if (walls.front > 0) {
-      addWall(
-        [
-          -mainWidth / 2 - extensionWidth / 2,
-          walls.front / 2,
-          mainDepth / 2 + extensionDepth / 2 + thickness / 2,
-        ],
-        [extensionWidth, walls.front, thickness]
-      );
-      addWall(
-        [
-          mainWidth / 2 + extensionWidth / 2,
-          walls.front / 2,
-          mainDepth / 2 + extensionDepth / 2 + thickness / 2,
-        ],
-        [extensionWidth, walls.front, thickness]
-      );
-    }
-  }
-
-  return <group>{wallsMeshes}</group>;
+        return (
+          <mesh
+            key={i}
+            position={[
+              (x1 + x2) / 2,
+              (height + 0.05) / 2 - 0.03,
+              (z1 + z2) / 2,
+            ]}
+            rotation={[0, angle, 0]}
+          >
+            <boxGeometry args={[0.1, height + 0.05, length]} />
+            <meshStandardMaterial map={texture} />
+          </mesh>
+        );
+      })}
+    </>
+  );
 }

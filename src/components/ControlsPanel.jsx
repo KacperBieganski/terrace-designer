@@ -74,42 +74,43 @@ export default function ControlsPanel({ activeTab }) {
       )}
 
       {activeTab === "wall" && (
-        <>
-          {["left", "right", "front", "back"].map((side) => (
-            <label
-              key={side}
-              style={{ display: "block", marginBottom: "10px" }}
-            >
-              {side.charAt(0).toUpperCase() + side.slice(1)} (m):
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "10px" }}
-              >
-                <input
-                  type="range"
-                  min={0}
-                  max={5}
-                  step={0.1}
-                  value={walls[side]}
-                  onChange={(e) =>
-                    setWallHeight(side, parseFloat(e.target.value) || 0)
-                  }
-                />
-                <input
-                  type="number"
-                  min={0}
-                  max={5}
-                  step={0.1}
-                  value={walls[side]}
-                  onChange={(e) =>
-                    setWallHeight(side, parseFloat(e.target.value) || 0)
-                  }
-                  style={{ width: "60px", marginLeft: "10px" }}
-                />
-              </div>
-            </label>
-          ))}
-        </>
+        <div>
+          <p>Wysokości ścian:</p>
+          <label>
+            {Object.keys(walls).map((key) => (
+              <>
+                Ściana {parseInt(key) + 1}:{" "}
+                <div
+                  key={key}
+                  style={{ display: "flex", alignItems: "center", gap: "10px" }}
+                >
+                  <input
+                    type="range"
+                    min={0}
+                    max={10}
+                    step={0.1}
+                    value={walls[key]}
+                    onChange={(e) =>
+                      setWallHeight(parseInt(key), parseFloat(e.target.value))
+                    }
+                  />
+                  <input
+                    type="number"
+                    value={walls[key]}
+                    step="0.1"
+                    min="0"
+                    max="10"
+                    onChange={(e) =>
+                      setWallHeight(parseInt(key), parseFloat(e.target.value))
+                    }
+                  />
+                </div>
+              </>
+            ))}
+          </label>
+        </div>
       )}
+
       <div style={{ position: "absolute", bottom: "35px" }}>
         <label style={{ cursor: "pointer", userSelect: "none" }}>
           <input
