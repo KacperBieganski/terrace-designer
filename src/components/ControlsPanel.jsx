@@ -74,7 +74,7 @@ export default function ControlsPanel({ activeTab }) {
       )}
 
       {activeTab === "wall" && (
-        <div>
+        <div className="walls">
           <p>Wysokości ścian:</p>
           <label>
             {Object.keys(walls).map((key) => (
@@ -111,7 +111,7 @@ export default function ControlsPanel({ activeTab }) {
         </div>
       )}
 
-      <div style={{ position: "absolute", bottom: "35px" }}>
+      <div className="checkbox-section">
         <label style={{ cursor: "pointer", userSelect: "none" }}>
           <input
             type="checkbox"
@@ -121,8 +121,6 @@ export default function ControlsPanel({ activeTab }) {
           />
           Pokaż tło
         </label>
-      </div>
-      <div style={{ position: "absolute", bottom: "15px" }}>
         <label style={{ cursor: "pointer", userSelect: "none" }}>
           <input
             type="checkbox"

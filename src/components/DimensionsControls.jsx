@@ -42,7 +42,7 @@ export default function DimensionsControls() {
   };
 
   return (
-    <>
+    <div className="dimensions-controls">
       {shape === "square" && (
         <>
           <p>Dopasuj wymiary:</p>
@@ -68,6 +68,7 @@ export default function DimensionsControls() {
       {(shape === "L" || shape === "T" || shape === "U") && (
         <>
           <p>Dopasuj wymiary:</p>
+
           <DimensionInput
             label="Główna szerokość (m)"
             field="mainWidth"
@@ -102,7 +103,7 @@ export default function DimensionsControls() {
           />
         </>
       )}
-    </>
+    </div>
   );
 }
 

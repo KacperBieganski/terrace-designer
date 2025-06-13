@@ -5,6 +5,8 @@ import { useRef } from "react";
 import TerraceModel from "./TerraceModel";
 import Environment from "../components/Environment";
 import { useTerraceStore } from "../store/useTerraceStore";
+import { useEffect } from "react";
+import { useThree } from "@react-three/fiber";
 
 function ControlsWithReset({ controlsRef }) {
   const max = 20;
@@ -30,6 +32,34 @@ function ControlsWithReset({ controlsRef }) {
   );
 }
 
+function ResizeUpdater() {
+  const { gl, camera, size } = useThree();
+
+  useEffect(() => {
+    const handleResize = () => {
+      const canvasParent = gl.domElement.parentElement;
+
+      if (canvasParent) {
+        const width = canvasParent.clientWidth;
+        const height = canvasParent.clientHeight;
+
+        gl.setSize(width, height);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [gl, camera]);
+
+  return null;
+}
+
 export default function SceneCanvas() {
   const controlsRef = useRef();
   const { showEnvironment } = useTerraceStore();
@@ -41,8 +71,9 @@ export default function SceneCanvas() {
   };
 
   return (
-    <div className="scene-canvas" style={{ position: "relative" }}>
-      <Canvas shadows camera={{ position: [5, 5, 5], fov: 50 }}>
+    <div className="scene-canvas">
+      <Canvas shadows camera={{ position: [10, 10, 10], fov: 50 }}>
+        <ResizeUpdater />
         <ambientLight intensity={0.6} />
         <directionalLight
           position={[10, 10, 5]}

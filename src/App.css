@@ -13,10 +13,12 @@
 .app-container {
   display: flex;
   flex-grow: 1;
+  height: 100vh;
 }
 
 .controls-panel {
   width: 220px;
+  min-width: 220px;
   padding: 20px;
   background-color: #f3f3f3;
   border-right: 1px solid #ccc;
@@ -50,6 +52,15 @@
 
 .scene-canvas {
   flex-grow: 1;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.scene-canvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .tab-buttons {
@@ -157,4 +168,77 @@
     30% 100%,
     0 100%
   );
+}
+
+.checkbox-section {
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  position: absolute;
+  bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+    height: calc(100vh - 60px); /* odejmij wysokość navigation */
+    box-sizing: border-box;
+  }
+
+  .controls-panel {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: unset;
+    height: 110px;
+    min-height: 110px;
+    border-right: none;
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-start;
+    overflow-x: auto;
+    font-size: 13px;
+  }
+
+  .scene-canvas {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+  }
+
+  .shape-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .shape-preview {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 0px;
+  }
+
+  .material-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    margin-top: 10px;
+  }
+
+  .material-option {
+    width: 80%;
+  }
+
+  .dimensions-controls {
+    width: 100%;
+  }
+
+  .dimensions-controls label {
+    width: 100%;
+  }
+
+  .walls {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
 }
