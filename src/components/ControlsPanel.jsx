@@ -1,21 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTerraceStore } from "../store/useTerraceStore";
 import DimensionsControls from "./DimensionsControls";
 
 export default function ControlsPanel({ activeTab }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const panelRef = useRef(null);
   const { material, walls, shape, setMaterial, setWallHeight, setShape } =
     useTerraceStore();
-
   const [textures, setTextures] = useState([]);
-  const showMeasurements = useTerraceStore((state) => state.showMeasurements);
-  const setShowMeasurements = useTerraceStore(
-    (state) => state.setShowMeasurements
-  );
 
-  const showEnvironment = useTerraceStore((state) => state.showEnvironment);
-  const setShowEnvironment = useTerraceStore(
-    (state) => state.setShowEnvironment
-  );
+  useEffect(() => {
+    const panel = panelRef.current;
+    if (!panel) return;
+
+    if (window.innerWidth <= 768) {
+      if (isExpanded) {
+        panel.style.maxHeight = panel.scrollHeight + "px";
+      } else {
+        panel.style.maxHeight = "110px";
+      }
+    }
+  }, [isExpanded, activeTab]);
 
   useEffect(() => {
     setTextures([
@@ -32,7 +37,10 @@ export default function ControlsPanel({ activeTab }) {
   }, []);
 
   return (
-    <div className="controls-panel">
+    <div
+      ref={panelRef}
+      className={`controls-panel ${isExpanded ? "expanded" : ""}`}
+    >
       {activeTab === "shape" && (
         <div>
           <p>Wybierz kształt:</p>
@@ -111,26 +119,16 @@ export default function ControlsPanel({ activeTab }) {
         </div>
       )}
 
-      <div className="checkbox-section">
-        <label style={{ cursor: "pointer", userSelect: "none" }}>
-          <input
-            type="checkbox"
-            checked={showEnvironment}
-            onChange={(e) => setShowEnvironment(e.target.checked)}
-            style={{ marginRight: "8px" }}
-          />
-          Pokaż tło
-        </label>
-        <label style={{ cursor: "pointer", userSelect: "none" }}>
-          <input
-            type="checkbox"
-            checked={showMeasurements}
-            onChange={(e) => setShowMeasurements(e.target.checked)}
-            style={{ marginRight: "8px" }}
-          />
-          Pokaż wymiary
-        </label>
-      </div>
+      {window.innerWidth <= 768 && activeTab !== "shape" && (
+        <div className="expand-toggle-wrapper">
+          <button
+            className="expand-toggle-button"
+            onClick={() => setIsExpanded((prev) => !prev)}
+          >
+            {isExpanded ? "▲" : "▼"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

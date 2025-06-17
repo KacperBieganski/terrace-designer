@@ -60,19 +60,23 @@ function ResizeUpdater() {
   return null;
 }
 
-export default function SceneCanvas() {
+export default function SceneCanvas({ resetViewRef }) {
   const controlsRef = useRef();
   const { showEnvironment } = useTerraceStore();
 
-  const resetView = () => {
-    if (controlsRef.current) {
-      controlsRef.current.reset();
+  useEffect(() => {
+    if (resetViewRef) {
+      resetViewRef.current = () => {
+        if (controlsRef.current) {
+          controlsRef.current.reset();
+        }
+      };
     }
-  };
+  }, [resetViewRef]);
 
   return (
     <div className="scene-canvas">
-      <Canvas shadows camera={{ position: [10, 10, 10], fov: 50 }}>
+      <Canvas shadows camera={{ position: [0, 20, 0], fov: 50 }}>
         <ResizeUpdater />
         <ambientLight intensity={0.6} />
         <directionalLight
@@ -86,10 +90,6 @@ export default function SceneCanvas() {
         <TerraceModel />
         <ControlsWithReset controlsRef={controlsRef} />
       </Canvas>
-
-      <button className="reset-view-button" onClick={resetView}>
-        Resetuj widok
-      </button>
     </div>
   );
 }
