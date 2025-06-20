@@ -1,12 +1,66 @@
-# React + Vite
+# 🏡 Terrace Designer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Terrace Designer** to interaktywna aplikacja 3D oparta na **React Three Fiber**, umożliwiająca projektowanie nowoczesnych tarasów z uwzględnieniem komponentów takich jak panele, dachy szklane, podpory i więcej.
 
-Currently, two official plugins are available:
+## ✨ Funkcje
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+* 🧱 Dodawanie i modyfikacja segmentów tarasu
+* �� Konfigurator dachu szklanego (ilość rzędów, kolumn, spadki, grubość szkła)
+* 📀 Dynamiczne obliczanie wymiarów i pozycjonowanie elementów
+* 🧮 Interaktywne wskaźniki rozmiarów
+* ⚙️ Obsługa wielu typów komponentów: profile, panele, słupki, szkło
+* 📦 Możliwość rozbudowy o dodatkowe funkcjonalności (np. generowanie wyceny)
 
-## Expanding the ESLint configuration
+## 🔧 Technologie
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* [React](https://reactjs.org/)
+* [React Three Fiber](https://docs.pmnd.rs/react-three-fiber)
+* [Three.js](https://threejs.org/)
+* [Leva](https://github.com/pmndrs/leva)
+* [Zustand](https://github.com/pmndrs/zustand)
+* [Drei](https://github.com/pmndrs/drei)
+* TypeScript
+
+## 🚀 Uruchomienie projektu lokalnie
+
+1. Sklonuj repozytorium:
+
+```bash
+git clone https://github.com/KacperBieganski/terrace-designer.git
+cd terrace-designer
+```
+
+2. Zainstaluj zależności:
+
+```bash
+npm install
+```
+
+3. Uruchom aplikację:
+
+```bash
+npm run dev
+```
+
+Aplikacja będzie dostępna pod adresem: [http://localhost:5173](http://localhost:5173)
+
+## 🗂 Struktura projektu (skrótowo)
+
+```
+src/
+│
+├─ components/         → Główne komponenty 3D (Profile, Panele, Dach, itd.)
+├─ store/              → Zustand – zarządzanie stanem
+├─ helpers/            → Funkcje pomocnicze do obliczeń geometrii, pozycji itd.
+├─ config/             → Domyślne wartości i schematy konfiguracyjne
+├─ hooks/              → Custom hooki (np. update state, resize handling)
+├─ App.tsx             → Główna aplikacja
+└─ main.tsx            → Punkt wejścia
+```
+
+## 🔮 Przyszłe usprawnienia
+
+* Eksport projektu do PDF lub STL
+* Obsługa wielu materiałów i kolorów
+* Zapisywanie i wczytywanie projektów
+* Tryb AR / WebXR (podgląd tarasu w rzeczywistości)
